@@ -1,0 +1,31 @@
+name: Update
+on:
+  schedule:
+    - cron: '0 * * * *'
+
+  push:
+    branches: [ master ]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install -r requirements.txt
+
+      - name: Run Script
+        run: |
+          python main.py
+
+      - uses: stefanzweifel/git-auto-commit-action@v4.16.0
+        with:
+          commit_message: "feat: adding coordinates to csv file"
+          file_pattern: '*.csv'
